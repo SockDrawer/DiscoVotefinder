@@ -1,0 +1,53 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ parameter type="System.Int32" name="Day" #>
+<#@ parameter type="System.Collections.Generic.IEnumerable<DiscoVotefinder.MainClass.Player>" name="Players" #>
+<#@ parameter type="System.String" name="Motd" #>
+<#@ parameter type="System.DateTime" name="Deadline" #>
+<#@ parameter type="System.Int32" name="Topic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# 
+var Targets = Players.Where(p => p.VotesAgainst.Count > 0).OrderByDescending(p => p.Votecount).ThenBy(p => p.Name);
+var NotVoting = Players.Where(p => p.CurrentVote == null).OrderBy(p => p.Name);
+var Laggards = Players.Where(p => (DateTime.UtcNow - p.LastPost).TotalDays > 1).OrderBy(p => p.LastPost).ThenBy(p => p.Name);
+var PlayerCount = Players.Count();
+var Until = Deadline - DateTime.Now;
+ #>
+<u>Votecount for Day <#= Day #></u>
+<table>
+<# foreach(var p in Targets) { #>
+<tr>
+<td><img src="<#= SvgGenerator.GenerateDataUri(PlayerCount, p.Votecount) #>" width="100" height="12"/></td>
+<td><b><#= p.Name #> (<#= p.Votecount #>):</b></td>
+<td><#
+foreach(var v in p.VotesAgainst) {
+if(v.UnvotePostNum == 0) Write("<b>"); 
+#><a href="/t/<#= Topic #>/<#=v.VotePostNum#>"><#=v.Actor#></a><#if(v.UnvotePostNum != 0) { 
+	#> <a href="/t/<#= Topic #>/<#=v.UnvotePostNum#>">[X]</a><#
+	} else Write("</b>"); #>, 
+<#}#></td>
+</tr>
+<# } #>
+<tr>
+<td><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="100" height="12"/></td>
+<td><b>Not Voting (<#= NotVoting.Count() #>):</b></td>
+<td><#= String.Join(", ", NotVoting.Select(nv => nv.Name)) #>
+</td>
+</tr>
+</table>
+<#if(!String.IsNullOrWhiteSpace(Motd)) {#>
+
+<#= Motd #>
+<#}#>
+
+With <#= PlayerCount #> players, it's **<#= Math.Ceiling(PlayerCount / 2.0).ToString("0") #> to execute!** Deadline is on <#=Deadline.ToString("D")#> at <#=Deadline.ToString("t")#> <#=
+TimeZoneInfo.Local.IsDaylightSavingTime(Deadline) ? TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName #> &mdash; that's in **<#=Until.Days * 24 + Until.Hours#> hours, <#=Until.Minutes#> minutes!**
+<#if(Laggards.Count() > 0) { #>
+
+:warning: These players have not posted in 24 hours or more!
+<#= String.Join(", ", Laggards.Select(l => "@" + l.Name)) #>
+
+Players must post at least once every 24 hours or risk elimination!
+<# } #>

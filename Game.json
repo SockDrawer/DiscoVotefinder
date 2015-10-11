@@ -1,0 +1,38 @@
+﻿{
+	"auth" : {
+		"url" : "https://what.thedailywtf.com/",
+		"thread" : 51593
+		},
+	"state" : {
+		"mode" : "Day",
+		"day" : 1,
+		"motd" : "",
+		"startpost" : 103,
+		"deadline" : "2015-10-11T12:00:00-04:00",
+		"players" : [
+			"Piko",
+			"izzion",
+			"accalia",
+			"Yamikuronue",
+			"RaceProUK",
+			"DoctorJones",
+			"Vault_Dweller",
+			"riking",
+			"Jaloopa",
+			"Jarry",
+			"Onyx",
+			"aliceif",
+			"ChaosTheEternal",
+			"lolwhat",
+			"Dreikin",
+			"JazzyJosh",
+			"Weng",
+			"abarker",
+			"Arantor",
+			"Placeholder",
+			"swayde",
+			"jaming",
+			"Maciejasjmj"
+		]
+	}
+}
