@@ -22,9 +22,9 @@ namespace DiscoVotefinder
 
 			public int Votecount { get { return VotesAgainst.Count((v) => v.UnvotePostNum == 0); } }
 
-			public bool MinusOne { get { return Math.Ceiling(MainClass.Players.Count() / 2.0) - Votecount == 1; } }
+			public bool MinusOne { get { return Math.Ceiling((MainClass.Players.Count() + 0.5) / 2.0) - Votecount == 1; } }
 
-			public bool Hammered { get { return Math.Ceiling(MainClass.Players.Count() / 2.0) - Votecount <= 0; } }
+			public bool Hammered { get { return Math.Ceiling((MainClass.Players.Count() + 0.5) / 2.0) - Votecount <= 0; } }
 
 			public override string ToString()
 			{
@@ -92,7 +92,7 @@ namespace DiscoVotefinder
 		public static void ProcessActions(JObject postdata, Action<string, string, string, int> callback)
 		{
 			if(VoteFinder == null) {
-				var vfsb = new StringBuilder("(?:<h2>(?:##)?|##)(?<action>vote|unvote|kill)(?:</strong>)?(?: (?:<a class=\"mention\" href=\"[^\"]+\">@(?<target>[^<]+)</a>");
+				var vfsb = new StringBuilder("(?:<h2>(?:##)?|##) ?(?<action>vote|unvote|kill)(?:</strong>)?(?: (?:<a class=\"mention\" href=\"[^\"]+\">@(?<target>[^<]+)</a>");
 				foreach(var p in Players.Values) {
 					vfsb.Append("|(?<target>");
 					vfsb.Append(p.Name.ToLower());

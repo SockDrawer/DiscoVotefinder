@@ -25,7 +25,7 @@ namespace DiscoVotefinder
 
 		public static string GenerateSvg(int players, int votes){
 			var sb = new StringBuilder(String.Format("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{0:0}\" height=\"{1:0}\">", Width, Height));
-			double target = Math.Ceiling(players / 2.0);
+			double target = Math.Ceiling((players + 0.5) / 2.0);
 			if(votes >= target) { //Hammered
 				double overkilllimit = players-target;
 				double overkill = votes - target;
