@@ -69,7 +69,7 @@ namespace DiscoVotefinder
 			}
 
 			var Quiets = "<table><tr><th>Player</th><th>Posts</th></tr>" + String.Join("",
-				             Players.Values.OrderByDescending(p => p.Postcount).Select(p => string.Format("<tr><td>{0}</td><td>{1}</td>",
+				             Players.Values.OrderByDescending(p => p.Postcount).Select(p => string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
 					             p.Name, p.Postcount))) + "</table>";
 
 			var t = new PostTemplate();
@@ -81,12 +81,13 @@ namespace DiscoVotefinder
 			t.Session["Topic"] = topic;
 
 			t.Initialize();
-			System.Console.Write(t.TransformText());
+            var vcpost = t.TransformText();
+			System.Console.Write(vcpost);
 
 			System.Diagnostics.Debugger.Break();
 		}
 
-		public static Regex QuoteStripper = new Regex("<aside[^>]+>(?>(?!</?aside).|<aside[^>]+>(?<Depth>)|</aside>(?<-Depth>))*(?(Depth)(?!))</aside>");
+		public static Regex QuoteStripper = new Regex("<aside[^>]+>(?>(?!</?aside).|<aside[^>]+>(?<Depth>)|</aside>(?<-Depth>))*(?(Depth)(?!))</aside>", RegexOptions.Singleline);
 		public static Regex VoteFinder;
 
 		public static void ProcessActions(JObject postdata, Action<string, string, string, int> callback)

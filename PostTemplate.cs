@@ -31,7 +31,7 @@ namespace DiscoVotefinder
             
             #line 11 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
  
-var Targets = Players.Where(p => p.VotesAgainst.Count > 0).OrderByDescending(p => p.Votecount).ThenBy(p => p.Name);
+var Targets = Players.Where(p => p.VotesAgainst.Count > 0).OrderByDescending(p => p.Votecount).ThenBy(p => p.VotesAgainst.Last().VotePostNum);
 var NotVoting = Players.Where(p => p.CurrentVote == null).OrderBy(p => p.Name);
 var Laggards = Players.Where(p => (DateTime.UtcNow - p.LastPost).TotalDays > 1).OrderBy(p => p.LastPost).ThenBy(p => p.Name);
 var PlayerCount = Players.Count();
@@ -200,7 +200,7 @@ if(!String.IsNullOrWhiteSpace(Motd)) {
             
             #line default
             #line hidden
-            this.Write(" to execute!** Deadline is on ");
+            this.Write(" to execute!** Deadline is on [");
             
             #line 45 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Deadline.ToString("D")));
@@ -221,37 +221,44 @@ if(!String.IsNullOrWhiteSpace(Motd)) {
             
             #line default
             #line hidden
-            this.Write(" &mdash; that\'s in **");
+            this.Write("](http://currentmillis.com/?");
             
             #line 46 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture((Deadline.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds.ToString("0")));
+            
+            #line default
+            #line hidden
+            this.Write(") &mdash; that\'s in **");
+            
+            #line 47 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Until.Days * 24 + Until.Hours));
             
             #line default
             #line hidden
             this.Write(" hours, ");
             
-            #line 46 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
+            #line 47 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Until.Minutes));
             
             #line default
             #line hidden
             this.Write(" minutes!**\r\n");
             
-            #line 47 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
+            #line 48 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
 if(Laggards.Count() > 0) { 
             
             #line default
             #line hidden
             this.Write("\r\n:warning: These players have not posted in 24 hours or more!\r\n");
             
-            #line 50 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
+            #line 51 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", Laggards.Select(l => "@" + l.Name))));
             
             #line default
             #line hidden
             this.Write("\r\n\r\nPlayers must post at least once every 24 hours or risk elimination!\r\n");
             
-            #line 53 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
+            #line 54 "C:\Users\dev_07\Documents\GitHub\DiscoVotefinder\PostTemplate.tt"
  } 
             
             #line default

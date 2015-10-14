@@ -9,7 +9,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <# 
-var Targets = Players.Where(p => p.VotesAgainst.Count > 0).OrderByDescending(p => p.Votecount).ThenBy(p => p.Name);
+var Targets = Players.Where(p => p.VotesAgainst.Count > 0).OrderByDescending(p => p.Votecount).ThenBy(p => p.VotesAgainst.Last().VotePostNum);
 var NotVoting = Players.Where(p => p.CurrentVote == null).OrderBy(p => p.Name);
 var Laggards = Players.Where(p => (DateTime.UtcNow - p.LastPost).TotalDays > 1).OrderBy(p => p.LastPost).ThenBy(p => p.Name);
 var PlayerCount = Players.Count();
@@ -42,8 +42,9 @@ if(v.UnvotePostNum == 0) Write("<b>");
 <#= Motd #>
 <#}#>
 
-With <#= PlayerCount #> players, it's **<#= Math.Ceiling((PlayerCount + 0.5) / 2.0).ToString("0") #> to execute!** Deadline is on <#=Deadline.ToString("D")#> at <#=Deadline.ToString("t")#> <#=
-TimeZoneInfo.Local.IsDaylightSavingTime(Deadline) ? TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName #> &mdash; that's in **<#=Until.Days * 24 + Until.Hours#> hours, <#=Until.Minutes#> minutes!**
+With <#= PlayerCount #> players, it's **<#= Math.Ceiling((PlayerCount + 0.5) / 2.0).ToString("0") #> to execute!** Deadline is on [<#=Deadline.ToString("D")#> at <#=Deadline.ToString("t")#> <#=
+TimeZoneInfo.Local.IsDaylightSavingTime(Deadline) ? TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName #>](http://currentmillis.com/?<#= 
+(Deadline.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds.ToString("0") #>) &mdash; that's in **<#=Until.Days * 24 + Until.Hours#> hours, <#=Until.Minutes#> minutes!**
 <#if(Laggards.Count() > 0) { #>
 
 :warning: These players have not posted in 24 hours or more!

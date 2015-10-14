@@ -9,7 +9,7 @@ namespace DiscoVotefinder
 		public static double Height = 12.0;
 
 		public static string OkFg = "#005600";
-		public static string OkBg = "#FFFFFF"; // not used
+		public static string OkBg = "#FFFFFF";
 		public static string M1Fg = "#617500";
 		public static string M1Bg = "#B6CF3F";
 		public static string NgFg = "#AC1717";
@@ -40,7 +40,7 @@ namespace DiscoVotefinder
 
 			}
 			else {
-				//sb.Append(string.Format("<rect width=\"100%\" height=\"100%\" fill=\"{0}\" />", OkBg));
+				sb.Append(string.Format("<rect width=\"100%\" height=\"100%\" fill=\"{0}\" />", OkBg));
 				sb.Append(string.Format("<rect x=\"{1:0.00%}\" width=\"{0:0.00%}\" height=\"100%\" fill=\"{2}\" />", 
 					votes / target, 1.0 - votes / target, OkFg));
 			}
