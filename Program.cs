@@ -137,7 +137,7 @@ namespace DiscoVotefinder
 
 		public static IEnumerable<JObject> GetPosts(long topic)
 		{
-			string url = string.Format("{0}/t/{1}/posts.json?includeraw=1", Base, topic);
+			string url = string.Format("{0}/t/{1}/posts.json?include_raw=1", Base, topic);
 			var streamjson = (url + "&post_ids[]=0").ToJson();
 			var stream = (JArray) streamjson["post_stream"]["stream"];
 			int i = 0;
